@@ -10,12 +10,13 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
+    // the onAuthStateChanged() returns a function that can unsub from the observer
     const unsub = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      console.log(user);
     });
 
     // for real-time application you need clean-up function or memory may leak
+    // the clean-up function executed when component unmount
     return () => {
       unsub();
     };
