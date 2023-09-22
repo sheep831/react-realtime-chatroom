@@ -8,6 +8,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const [error, setError] = useState(false);
+  const [errorCode, setErrorCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate(); // use in callback function
 
   const handleSubmit = async (e) => {
@@ -50,6 +52,12 @@ const Register = () => {
         });
       });
     } catch (error) {
+      setErrorCode(error.code);
+      setErrorMessage(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setErrorMessage("Email already in use");
+        setErrorCode("403");
+      }
       setError(true);
     }
   };
@@ -69,7 +77,9 @@ const Register = () => {
             <span>Add an avatar</span>
           </label>
           <button>Sign up</button>
-          {error && <span>Error Occur</span>}
+          {error && (
+            <span className="error">{`${errorCode} : ${errorMessage}`}</span>
+          )}
         </form>
         <p>
           You do have an account? <Link to="/login">Login</Link>{" "}
